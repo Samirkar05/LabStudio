@@ -1,0 +1,850 @@
+\documentclass[a4paper,twoside,12pt]{article}
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc} 
+\usepackage[catalan]{babel} 
+\usepackage{amsmath, amssymb, amsthm} 
+\allowdisplaybreaks
+\usepackage{graphicx}
+\usepackage{verbatim}  
+\usepackage{booktabs}
+\usepackage[justification=centering]{caption}
+\usepackage{biblatex}
+\addbibresource{myrefs.bib}
+\usepackage{calc}            % for \dimexpr
+\usepackage{comment}
+\usepackage{physics}
+\usepackage[many]{tcolorbox}
+\definecolor{problemblue}{RGB}{100,134,158}
+\definecolor{idiomsgreen}{RGB}{0,162,0}
+\definecolor{exercisebgblue}{RGB}{192,232,252}
+\graphicspath{{figures/}}
+\newtcolorbox{idioms}{
+	breakable,
+	enhanced,
+	colback=white,
+	colframe=idiomsgreen,
+	arc=0pt,
+	outer arc=0pt,
+	title=Python code,
+	fonttitle=\bfseries\sffamily\large,
+	colbacktitle=idiomsgreen,
+	attach boxed title to top left={},
+	boxed title style={
+		enhanced,
+		skin=enhancedfirst jigsaw,
+		arc=3pt,
+		bottom=0pt,
+		interior style={fill=idiomsgreen}
+	}
+}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{helvet}       % use Helvetica for the whole document
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{titling}
+\usepackage[export]{adjustbox}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+\usepackage{xcolor}   % ← add this
+\newcommand\dif{\mathop{}\!\mathrm{d}}
+% Optional: tighten vertical space above title
+\setlength{\droptitle}{-5em}
+% 1) Allocate a new length register
+\newlength\figonlyheight
+
+% 2) Set it to \textheight
+\setlength\figonlyheight{\textheight}
+
+% 3) Subtract e.g. three lines of caption (3 × \baselineskip)
+\addtolength\figonlyheight{-4\baselineskip}
+\theoremstyle{definition}
+\usepackage{hyperref}
+\renewcommand{\figureautorefname}{Figura}
+% Remove next two lines for my preferred font:
+% Times text + matching math
+\usepackage{newtxtext,newtxmath}
+% micro-typography tweaks for justification, hyphenation, spacing
+\usepackage{microtype}
+\setlength{\parindent}{0pt}
+\begin{document}
+	\begin{center}
+		{\Large\bfseries Informe Individual: Llei dels Gasos Ideals}
+	\end{center}
+	\begin{center}
+		{\bfseries Grup: G1, Torn: Dimecres}\\
+				Samir El Karrat Moreno (1669773)\\
+		\vspace{0.25cm}
+		{Pràctica realitzada el 8 d'octubre de 2025.}
+	\end{center}
+	
+	\tableofcontents
+	
+	\section{Introducció i objectius}
+	
+	En aquesta pràctica mesurarem directament diverses variables d'estat, com són la temperatura absoluta $T$, pressió absoluta $p$ i volum $V$. Tractarem amb gasos com l'aire, CO$_2$ i el butà. Veurem com aquests gasos presenten un comportament de gas ideal, cosa la qual ens permetrà estudiar la variació de llurs variables d'estat. Per a aquesta tasca, aplicarem lleis per als gasos ideals als processos de compressió i expansió tant isotèrmica a la primera part, com adiabàtica, a la segona.
+	
+	
+	A nivell teòric, un gas ideal és aquell en què: (1) no hi ha interacció entre partícules del mateix, aquests únicament interaccionen amb les parets del volum en xocs totalment elàstics; i (2), les partícules no tenen volum propi. Combinant les lleis empíriques de Boyle, Charles i GayLussac, obtenim la llei dels gasos ideals:
+	
+	\begin{equation}
+		\label{eq:pvnrt}
+		p V = nRT,
+	\end{equation}
+	on $n$ correspon al nombre de mols del gas i $R$ a la constant dels gasos ideals.
+	
+	A nivell pràctic, veurem com els gasos seguiran un comportament de gas ideal (en major o menor mesura) mitjançant les següents experiències:
+	
+	\subsection{Expansions i compressions: Isotèrmiques}
+	En aquesta primera part, tenim com a objectiu verificar la l'Equació~\ref{eq:pvnrt} al llarg d'una isoterma per al gas ideal que utilitzam, en aquest cas aire. És a dir, volem comprobar que l'aire es comporta com a un gas ideal. Si sabem això, podrem conèixer la quantitat de mols d'aire $n$ al nostre experiment . No obstant, ens trobarem com el muntatge experimental pot afectar en gran mesura a l'obtenció d'aquesta quantitat. D'aquesta manerà, ens caldrà justificar i aplicar correccions en el volum mesurat incialment per veure als nostres gràfics com es exompleix el comportament descrit per la llei dels gasos ideals.
+	
+	
+	\subsection{Expansions i compressions: Adiabàtiques}
+	
+	\textbf{- Fonament teòric:}
+	
+	Un procés adiabàtic és aquell en què no hi ha intercanvi de calor amb l’entorn ($Q=0$). Per tant, qualsevol canvi d’energia interna ve exclusivament del treball fet pel gas o sobre ell, d’acord amb la primera llei de la Termodinàmica: $dU=-p\,dV$. Això contrasta amb el cas isotèrmic, on la temperatura roman constant perquè el sistema intercanvia calor amb l’exterior i, per a un gas ideal, $U$ (que només depèn de $T$) es manté inalterada. Experimentalment, aproximarem l’adiabaticitat mitjançant comprensions/expansions ràpides del gas contingut en un cilindre amb pistó, de manera que el flux de calor sigui negligible durant el transitori.
+	
+
+% Derivació lleugerament ampliada (clara i concisa)
+Per a un gas ideal, $U=U(T)$, de manera que $dU=C_V\,dT$ (on $C_V$ és la capacitat calorífica a volum constant del mateix nombre de mols). En un procés adiabàtic, com hem comentat, $Q=0$, i la primera llei dóna $dU=-p\,dV$. Si a més tenim en compte l'Equació ~\ref{eq:pvnrt}, tenim:
+\[
+C_V\,dT \;=\; -\,\frac{nRT}{V}\,dV.
+\]
+Dividint per $T$,
+\[
+C_V\,\frac{dT}{T} \;=\; -\,nR\,\frac{dV}{V}.
+\]
+Feim servir que $C_p-C_V=R$ i definim $\gamma=\dfrac{C_p}{C_V}$; així $R=C_p-C_V=(\gamma-1)C_V$. Substituint,
+\[
+C_V\,\frac{dT}{T} \;=\; -\,(\gamma-1)\,C_V\,\frac{dV}{V}
+\;\;\Longrightarrow\;\;
+\frac{dT}{T} \;=\; -\,(\gamma-1)\,\frac{dV}{V}.
+\]
+Podem ara integrar entre $(T_i,V_i)$ i $(T_f,V_f)$,
+
+\begin{equation}
+	\label{eq:TVgamma}
+	\ln\!\frac{T_f}{T_i} \;=\; -(\gamma-1)\,\ln\!\frac{V_f}{V_i}
+	\;\;\Longleftrightarrow\;\;
+	T\,V^{\gamma-1}=\text{const} .
+\end{equation}
+
+Finalment, combinant amb $T=\dfrac{pV}{nR}$ s'obté la relació de Poisson,
+
+\begin{equation}
+	\label{eq:poisson}
+	\frac{pV}{nR}\,V^{\gamma-1}=\text{const}
+	\;\;\Longleftrightarrow\;\;
+	p\,V^{\gamma}=\text{const}.
+\end{equation}
+
+
+	A partir de l'Equació~\ref{eq:poisson} podem escriure $p(V)=K\,V^{-\gamma}$ i calcular el treball mecànic de l'experiència adiabàtica com
+	\begin{equation}
+		\label{eq:Wadi}
+		W=\int_{V_i}^{V_f} p\,dV
+	\end{equation}
+	o bé mitjançant integració numèrica directa de les dades $p(V)$ recollides.
+	
+	\textbf{- Objectius:}
+	
+	Primerament, verificarem experimentalment les lleis adiabàtiques \ref{eq:TVgamma} i  \ref{eq:poisson} amb compressions/expansions suficientment ràpides per ser aproximades com a adiabàtiques. Veurem com els valors de  $T$ i $p$ en aquestes augmenten més ràpidament que en les isotermes de la primera part per la naturalesa de les equacions d'estat adiabàtiques. A més, amb les dades obtingudes podrem D
+	determinar el coeficient adiabàtic $\gamma$ per als diversos gasos. Finalment, avaluarem el treball fet en cada cicle adiabàtic mitjançant \eqref{eq:Wadi} i integració numèrica de $p\,dV$, comparant resultats.
+	\newpage
+	
+	\section{Muntatge i mètode experimental}
+	
+	\subsection{Expansions i compressions: Isotèrmiques}
+	En aquesta primera part comptam amb una xeringa de plastic dur amb un pistò, que ens permetran sotmetre al gas contingut a dintre, en el nostre cas aire, a diferents volums. Per a aquesta tasca, ens caldrà exercir força al pistó constantment per anul·lar la pressió del gas sobre aquest (possible font d'incertesa sobre el volum).
+	
+	A més, el sistema xeringa-pistó compta amb un acoblament de plàstic transparent al final de la xeringa on es connecten dos cables conectats cadascún als sensors de temperatura o de pressió. El sensor de temperatura es connecta per aquest cable al termistor de baixa massa tèrmica que es troba al final de la xeringa. És important comentar que la conexió del cable amb el sensor de pressió s'emprarà per tal de obrir o tancar el sistema de la xeringa. D'aquesta manera podrem sempre introduir aire fins a la pressió ambien donat qualsevol volum inicial.
+	
+	Pel que fa a la realització de l'experiment, es duran a terme un total de dues compressions. Cadascuna començarà a volums inicials diferents (40 i 60 cm$^3$ respectivament) i a pressió ambient, cosa la qual obtindrem desconnectant i connectant el tub de plàstic del sensor de pressió. Una vegada tancat el sistema, presionarem el pistó lentament en un interval de 5 cm$^3$. En arribar a aquest punts, esperarem fins que el gas arribi a la temperatura ambient del laboratori, i prendrem la mesura de pressió mitjançant el programa de l'ordinador, que ens mostra les lectures dels sensors. Repetirem aquest procés fins arribar als 23 cm$^3$ (el darrer pas serà de 2 cm$^3$), pressió a partir de la qual la pressió és tan gran que no ens permet disminuir més el volum degut a la força d'oposició que exerceix.
+	
+	\subsection{Expansions i compressions: Adiabàtiques}
+	
+	En aquesta segona part de la pràctica estudiam les compressions i expansions adiabàtiques de l'aire, del CO$_2$ i del butà. El muntatge experimental és molt similar al de la primera part: comptam amb un cilindre més gran amb un pistó que es pot accionar mitjançant una palanca. El sistema té incorporats sensors de pressió, temperatura i volum que es registren al programa de l'ordinador. Cal recalcar aquestes variables d'estat s'enregistren com a voltatges. Ens referim al guió de la pràctica \cite{guio_practiques}, on es detallen concretament les conversions d'aquests.
+	
+	Per a començar les experiències, ens caldrà primerament purgar el cilindre per eliminar restes de gasos, en el cas que prèviament s'hagui realitzat alguna altra experiència. Per tal d'aconseguir això, connectam bombona del gas d’estudi a la clau d’entrada (si el gas és aire, no cal bombona) i ens hem d'assegurar que la pressió de sortida sigui com a molt \( 35\,\mathrm{kPa}\). Acte seguit connectam la clau de sortida al buit del laboratori, deixant l'entrada tancada i sortida oberta per fer el buit, i seguidament tancam la sortida. Obrim ara l’entrada per fer pujar el pistó fins al final, omplint el cilindre. Finalment, repetim el procés de buit i compliment un parell de cops. En estar purgat el nostre cilindri, omplim amb el gas d'estudi que toqui i tancam les dues claus. Si igualam ara la pressió amb l’exterior obrint i tancant breument la clau de comunicació ens podem assegurar de que \(p_0 \approx p_{\text{atm}}\) i podem començar el procés de compressió o expansió:
+	
+	Adcionam el pistó de manera ràpida (per minimitzar l’intercanvi de calor). Durant cada cursa es registren simultàniament pressió, volum i temperatura. És important obtenir-ne prou punts per als càlculs que realitzarem, mínim 20 mesures per procés. 
+	
+	\newpage
+	
+	
+	\section{Resultats i discussió}
+	\subsection{Expansions i compressions: Isotèrmiques}
+	
+	\textbf{- Observeu els gràfics de pressió i temperatura. Correlacioneu els canvis amb el moviment del pistó:}
+	
+	A nivell qualitatiu, tal i com podem veure a la Figura~\ref{fig:q1}, en comprimir l'aire de la xeringa observam un augment de la pressió. La intuicïó física d'aquest fenòmen és clara: donat que el sistema és tancat, sense intercanvi de matèria amb l'exterior, les partícules del gas ara tenen menys espai per mourer-se. Així, xoquen amb major freqüència a les parets del recinte, exercint així una major força a les superfícies, interacció que correspon macroscòpicament com a un augment de pressió.
+	
+	Pel que fa a la temperatura, donat que disminium molt poc a poc el volum de la xeringa (1 cm$^3$/segon) la temperatura augmenta lleugerament. No obstant, aquesta diferència de temperatura amb l'exterior es veu dissipada en forma de calor, i podem considerar constant la temperatura. Aquest fet ens permet obtenir una isoterma de l'aire, actuant com a gas ideal (ho veurem a següents qüestions).
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[scale=0.6]{q1.png}
+		\caption{Gràfic de la pressió $P(t)$. Les incerteses són prou petites per ser aprediables amb l'escala del gràfic.}
+		\label{fig:q1}
+	\end{figure}
+	
+	\newpage
+	\textbf{- Per a cada posició del pistó, escolliu la pressió que tingui la temperatura més propera al
+		valor d’equilibri. No importa quin sigui aquest valor, sempre que totes les pressions es
+		mesurin a la mateixa temperatura. Registreu tots els valors en una taula.}
+		
+	A la realització de l'experiència de compressió, hem de comprimir l'aire dins de la xeringa molt lentament per donar temps a que el sistema intercanvi calor amb l'ambient. Per aquest motiu comprimim el gas amb un ritme aproximat de 1 cm$^3$/segon. En arribar al volum desitjat, el mantenim en posició i esperam un temps fins que arribi a la tempretaura d'equlibiri. Els resultats es poden observar a la següent taula: 
+	\begin{table}[h!]
+		\centering
+		\caption{Resultats de la 1ª compressió. Observam una incertesa de  $1$ cm$^3$ als volums provenent de l'error humà comès per haver de mantenir el volum exercint pressió i observant el regla incorprat a la xeringa simultàniament. Els $0,3$ kPa d'incertesa són conseqüència de fluctuacions en la mesura del programa per aquest matiex fet. }
+		\begin{tabular}{|ccc|}
+			\hline
+			$V$ (cm$^3$) &$P$ (kPa) &$T$ (K)\\
+			\hline
+		$45 \pm 1$&$97,70 \pm 0,3$&$298,00 \pm 0,05$\\
+		$40 \pm 1$&$109,40 \pm 0,3$&$298,00 \pm 0,05$\\
+		$35 \pm 1$&$122,60 \pm 0,3$&$298,00 \pm 0,05$\\
+		$30 \pm 1$&$140,60 \pm 0,3$&$297,95 \pm 0,05$\\
+		$25 \pm 1$&$164,10 \pm 0,3$&$297,95 \pm 0,05$ \\ \hline
+		\end{tabular}
+
+		\label{table:compressio1}
+	\end{table}
+	
+	Mitjançant un anàlisi estadístic (detallat al Càlcul d'Incerteses) de les temperatures registrades a cada volum, obtenim que la nostra temperatura d'equilibri és $T_{eq} = (297,980 \pm 0,051) K$.
+	
+
+	\textbf{- Calculeu la inversa de la pressió 1/P per a cada valor. Feu un gràfic de Volum vs 1/P.
+		Per què dona una recta? Utilitzeu la llei del gas ideal per demostrar que el gràfic de Volum
+		vs 1/P dona una recta amb pendent $nRT$:}
+		
+	Començam justificant la linealitat del gràfic de la Figura~\ref{fig:q3}:
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[scale=0.6]{q3.png}
+		\caption{$V$ vs. $P^{-1}$. Trobam la fòrmula de la incertesa per a $P^{-1}$ l'Equació~\ref{eq:incertesa_P_inv}. La recta de regressió té la forma $V = b\frac{1}{P} + a$. Els paràmetres de la recta de regressió es poden trobar a la Taula~\ref{tab:reg1}.}
+		\label{fig:q3}
+	\end{figure}
+	
+	
+\begin{table}[h]
+	\centering
+		\caption{Paràmetres de la regressió lineal $V = a + b\,P^{-1/\gamma}$ (aire, $\gamma=\tfrac{7}{5}$) corresponent a la Figura~\ref{fig:V_vs_Pm1gamma_air}. Aquí $a$ és la
+		ordenada ($a=-V_0$) i $b$ és la pendent expressada en unitats de volum per $P^{-1/\gamma}$ (cm$^3$$\cdot$kPa$^{1/\gamma}$). Noteu el canvi d'unitats a cm$^3$.}
+	\begin{tabular}{|c|c|}
+		\hline
+		Paràmetres & Valor \\
+		\hline
+		$a$ (cm$^3$) & $-4.49 \pm 0,34$ \\
+		$b$ (cm$^3$ $\cdot$kPa$^{1/\gamma}$) & $4848 \pm 41$ \\
+		$R^2$ & $0,9998$ \\
+		\hline
+	\end{tabular}
+	\label{tab:reg1}
+
+\end{table}
+
+	
+	Recordam la llei dels gasos ideals
+	$
+	PV = nRT,
+	$
+	 on $n$ és  el nombre de mols i $R = 8,314462 $ (valor obtingut a \cite{CODATA2018_R}) L kPa mol$^{-1}$ K$^{-1}$ la constant dels gasos. Per a un procés isoterm i amb quantitat de gas fixa (com és el nostre cas, $n$ i $T$ constants), podem aïllar $V$ de la següent manera:
+	\begin{equation}
+		\label{eq:reg1}
+			V \;=\; \frac{nRT}{P} \;=\; (nRT)\,\frac{1}{P} + 0.
+	\end{equation}
+
+	Definint les variables
+	$
+	x := \frac{1}{P}$ i $
+	y := V,
+	$
+	aleshores l’expressió pren la familiar forma d'una recta
+	\begin{equation}
+		\label{eq:modelrecta}
+	y \;=\; a + b\,x \quad\text{amb}\quad b = nRT \;\;\text{i}\;\; a=0.
+	\end{equation}
+
+	
+	Amb això podem ara identificar la recta de regressió a la Figura~\ref{fig:q3} com aquesta recta, que hauria de passar per l’origen (encara que veurem que no és així) amb pendent exactament $nRT$. Podem obtenir el nombre de mols aïllant $n$ a l'Equació~\ref{eq:modelrecta} per $b$:
+	
+	\begin{equation}
+		\label{eq:n}
+		n = \frac{b}{RT}.
+	\end{equation}
+	Trobam la incertesa associada a l'Equació~\ref{eq:incertesa_n}.
+	
+	
+	\textbf{- Determineu la pendent de la recta del gràfic. Utilitzeu els valors per calcular el nombre de
+		mols n d’aire dins la xeringa. Presteu atenció a les unitats!}
+	
+	Podem veure la pendent de la regressió a la Taula~\ref{tab:reg1}. No obstant per a aplicar l'Equació~\ref{eq:n}, ens cal passar $b$ de kPa$\cdot$cm$^3$ a kPa$\cdot$L. Així, $b = (4,848\pm0,041)$ L i prenent $T_{eq} = (297,980 \pm 0,051) K$ calculada a la qüestió 2, obtenim que hi han un total de $n = (19,57 \pm 0,17) \cdot 10^{-4}$ mols d'aire en la xeringa al llarg de la compressió. 
+	
+	Volem ara contrastar aquest nombre per saber si la seva magnitud obtinguda té sentit. Teòricament amb uns valors de $T_{eq} = 298 K$ i  $P = 101$ kPa obtenim que cada litre d'aire conté aproximadament $0,041$ mols.
+	Això ens indica que al nostre experiment comptam tèoricament amb $18,37 \cdot 10^{-4}$ mols d'aire. Comparat amb el valor experimental, veiem primerament que aquest valor no figura dins de la incertesa i que discrepa en un $7,0\%$ respecte l'experimental. Aquest error és substancial i motiva la següent qüestió.
+	
+	\textbf{Observeu el gràfic amb detall. Per què hi ha un desplaçament en l’eix del volum? Com
+		podeu explicar aquest volum extra?}
+	
+	Segons la Equació~\ref{eq:reg1}, ens esperariem que la recta de regressió de la Figura~\ref{fig:q3} passés per l'origen, és a dir, esperaríem $a = 0$ cm$^{3}$. No obstant com ja hem vist a la Taula~\ref{tab:reg1}, $a \neq 0$. Més enllà de l'error humà comès a la mesura de les dades, aquest fenòmen té una justificació física clara: hi ha un volum al nostre experiment que no hem tingut en compte.
+	
+	És clar que si ens param a pensar, el volum marcat per la xeringa \textit{de cap manera} representa el volum total del nostre experiment. El sensor de pressió i els tubs que el connecten a la xeringa contenen també aire inicialment, i per tant, contribueixen al volum total, afectant així a la mesura de la pressió en el programa. Aquest fet justicaria la discrepància del $7,0\%$ en mols d'aire de la discussió anterior.
+	
+	Davant aquesta situació, aplicarem una \textit{correcció de volum} al volum mesurat de la xeringa, que desenvoluparem en següents qüestions.
+	\newpage
+	\textbf{Repetiu el procediment, prenent dades de pressió i temperatura per a cada volum (55 cc,
+		50 cc, 45 cc, etc.) com heu fet anteriorment.}
+		
+	El procediment per obtenir les dades de la Taula~\ref{table:compressio2} ha sigut idèntic que a la 1ª compressió, només que ara hem començat amb pressió atmosfèrica als 60 cm$^3$, lo qual més endavant veurem com comporta un major nombre de mols al llarg de l'experiment.
+	
+	\begin{table}[h!]
+		\centering
+		
+		\caption{Resultats de la 2ª compressió. Incerteses: $1$ cm$^3$ en $V$, $0,3$ kPa en $P$ i $0,05$ K en $T$, amb les mateixes causes que a la 1ª compressió.}
+
+		\begin{tabular}{|ccc|}
+			\hline
+			$V$ (cm$^3$) & $P$ (kPa) & $T$ (K)\\
+			\hline
+			$60 \pm 1$ & $98,1 \pm 0,3$  & $298,51 \pm 0,05$\\
+			$55 \pm 1$ & $106,0 \pm 0,3$ & $298,72 \pm 0,05$\\
+			$50 \pm 1$ & $115,7 \pm 0,3$ & $298,77 \pm 0,05$\\
+			$45 \pm 1$ & $127,0 \pm 0,3$ & $299,08 \pm 0,05$\\
+			$40 \pm 1$ & $141,6 \pm 0,3$ & $299,08 \pm 0,05$\\
+			$35 \pm 1$ & $159,7 \pm 0,3$ & $299,08 \pm 0,05$\\
+			$30 \pm 1$ & $181,6 \pm 0,3$ & $299,03 \pm 0,05$\\
+			$25 \pm 1$ & $211,9 \pm 0,3$ & $299,03 \pm 0,05$\\
+			$23 \pm 1$ & $226,6 \pm 0,3$ & $298,97 \pm 0,05$\\
+			\hline
+		\end{tabular}
+		\label{table:compressio2}
+	\end{table}
+	
+	Amb el mateix procés que abans, obtenim una temperatura externa $T_e = 298,919\pm 0,084$ K.
+	
+	\textbf{Col·loqueu aquestes noves dades al mateix gràfic. Per què aquesta pendent és diferent?
+		El desplaçament de volum és aproximadament el mateix que abans?}
+		
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[scale=0.6]{comp2.png}
+		\caption{$V$ vs. $P^{-1}$ per a ambues compressions. Seguim el mateix càlculs d'incerteses que a la Figura~\ref{fig:q3}. Els paràmetres de la recta de regressió es poden trobar a la Taula~\ref{table:regressions12}.}
+		\label{fig:q5}
+	\end{figure}
+	
+	\begin{table}[h!]
+		\centering
+
+		\caption{Paràmetres de les regressions per ambdues compressions, juntament amb els nombres de mols estimat a partir de les diferents pendents. Observam una major precisió de les dades per a la nova compressió, degut a un millor ajust a les dades (R$^2$ més aprop a 1).}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			
+			Parametres & 1ª compressió & 2ª compressió \\ \hline
+			$a$ (cm$^3$) 
+			& $-4,50 \pm 0,34$
+			& $-5,09 \pm 0,12$ \\
+			$b$ (kPa$\cdot$cm$^3$) 
+			& $48484 \pm 41$
+			& $6378 \pm 16$ \\
+			$R^2$
+			& $0,9998$
+			& $0.9999$ \\
+			$n$ (mol)
+			& $(19,57 \pm 0,17) \cdot 10^{-4}$
+			&$(25,666 \pm 0,064) \cdot 10^{-4}$\\
+			\hline
+		\end{tabular}
+		\label{table:regressions12}
+	\end{table}
+	
+	Com ja hem puntualitzat a la qüestió anterior, la principal diferència en la realització d'aquestes dues experiències és l'estat incial. A la 1ª compressió hem fixat 45 cm$^3$ al a xeringa \textit{a pressió ambient}, fet aconseguit desconectant el conector de plàstic blanc de sensor de pressió prèviament, i connectant-lo en fixar el volum. La única diferència a la segona pressió és el volum inicial de 60 cm$^3$. Físicament podem justificar la diferència de pendents (veure Taula~\ref{table:regressions12}) de la següent forma:
+	
+	\newpage
+	A l'Equació~\ref{eq:modelrecta} per $b$ veiem com la pendent de regressió és directament proporcional al nombre de mols d'aire continguts al muntatge experimental (xeringa, tubs, sensor...). Llavors un augment de $b$ es pot explicar per un augment en $n$. Justificarem ara l'augment de $n$. Pel raonament del paràgraf anterior, intuïm que en fixar volum major amb la mateixa pressió obtenim un major nombre de mols al sistema. Això es veu fàcilment a la dels gasos ideals reordenada:
+	$$
+	\frac{V}{n} =  \frac{RT}{P} = \text{ctant}, \,\, V\uparrow \,\implies \, \frac{1}{n} \, \downarrow \, \implies \, n \uparrow
+	$$
+	
+	Pel que fa al desplaçament de volum, representat a les regressions com l'ordenada d'origen $a$, podem fer una comparació observant la Taula~\ref{table:regressions12}. Veiem com ambós desplaçaments encara que propers, no arriben a ser compatibles, ja que les incerteses no són prou grans. La discrepància respecte al valor d'$a$ per la 2ª compressió és del $11.7\pm 1.1\, \%$. Encara que és una diferència notable, en aquest qüestionari la considerarem raonable i per tant direm que els desplaçaments de volum observats a les regressions són \textit{aproximadament iguals}. No obstant, a l'informe individual d'aquesta pràctica, es considerarà com a una aproximació pobre. Conseqüentment es realitzarà una segona consideració per a la correció al volum: 
+	
+	
+	Fins ara, no havíem tingut en compte que en ambdós experiments, el rang de pressions és diferent. Comparant les Taules~\ref{table:compressio1} i ~\ref{table:compressio2} veiem que el rang de pressions és molt diferent, arribant a la 2ª compressió fins a 100 kPa més que a la primera. Això ens motiva a pensar que el volum del muntatge experimental \textit{varia segons la pressió}. Com major sigui el volum incial de la nostra compressió, major serà el nombre de mols a l'experiment i per tant l'espectre de pressions als volums més baixos (a partir dels 30 cm$^3$) incrementarà en gran mesura. Aquest increment, donat que les parets del tubs i fins i tot de la xeringa no són infinitament resistents a aquestes pressions, provocarà una expansió d'aquestes afectant al volum total del muntatge. 
+	
+	No esperam que aquesta diferència sigui molt gran, de l'ordre dels $0,1$ cm$^3$. No obstant, si que esperam que sigui suficient per obtenir valors \textit{compatibles} en el desplaçament de volums de les regressions, una vegada aplicada aquesta nova correcció. Recalcam que aquest fenomen s'estudiarà com a ampliació a l'informe individual.
+	
+	\textbf{Calculeu el quocient de la pressió final respecte a la inicial $\frac{P_2}{P_1}$. Calculeu el quocient
+		del volum inicial respecte al final $\frac{V_1}{V_2}$. Són iguals? Per què no?}
+	
+	Començam amb el càlcul de quocients. Mitjançant les primeres i darreres dades de les Taules ~\ref{table:compressio1} i ~\ref{table:compressio2} i obtenim:
+	
+	\begin{table}[h!]
+		\centering
+		\caption{Comparativa dels quocients de pressió i volum (finals i inicials) dels dos experiments de compressió. Veure les incerteses associades a les Equacions~\ref{eq:incertesa_P2sobreP1}, ~\ref{eq:incertesa_V1sobreV2} i ~\ref{eq:incertesa_delta_quotients}.}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Paràmetres & 1º Compressió & 2º Compressió \\
+			\hline
+			$P_2/P_1$ 
+			& $1,6796 \;\pm\; 0,0060$
+			& $2,3099 \;\pm\; 0,0077$ \\
+			$V_1/V_2$ 
+			& $1,800 \;\pm\; 0,082$
+			& $2,61 \;\pm\; 0,12$ \\
+			$\Delta \equiv |P_2/P_1 - V_1/V_2|$
+			& $0,120 \;\pm\; 0,083$
+			& $0,30 \;\pm\; 0,12$ \\
+			\hline
+		\end{tabular}
+		\label{table:ratio_checks_s1s2}
+	\end{table}
+	
+	Veiem com, evidenciat per la discrepància absoluta $\Delta \neq 0$, els quocients de pressió i temperatura no són iguals. Ni tan sols són compatibles dins del marc de les seves incerteses. La raó ja l'hem estudiat a qüestions anteriors: el desplaçament de volums observat a les regressions significa que la pressió mesurada, no és realment l'associada al volum de la xeringa. Ens falta afegir-ne el volum provnent dels cables i del sensor de pressió. Llavors sí podrem esperar una $\Delta \approx 0$.
+	
+	\textbf{- Utilitzant els valors mesurats de $V_1$, $V_2$, $P_1$ i $P_2$, resol algebraicament l'equació $\frac{V_{1}+V_{0}}{V_{2}+V_{0}}=\frac{P_{2}}{P_{1}}$ per trobar i calcular
+		la correció de volum $V_0$.}
+	
+	Partim de l'equació
+	\[
+	\frac{V_{1}+V_{0}}{V_{2}+V_{0}}=\frac{P_{2}}{P_{1}}
+	\]
+	Realitzant el producte creuat obtenim l'expressió:
+	\[
+	P_{1}\,(V_{1}+V_{0}) \;=\; P_{2}\,(V_{2}+V_{0}),
+	\]
+	on podem aïllar els termes amb $V_{0}$ al mateix costat:
+	\[
+	P_{1}V_{1}-P_{2}V_{2} \;=\; (P_{2}-P_{1})\,V_{0}.
+	\]
+	Com que als experiments les pressions inicials i finals compleixen $P_{1}\neq P_{2}$, dividim per $(P_{2}-P_{1})$ i obtenim (veure incertesa a l'Equació~\ref{eq:incertesa_V0}):
+	\begin{equation}
+		\label{eq:correction}
+		V_{0} \;=\; \frac{P_{2}V_{2}-P_{1}V_{1}}{\,P_{1}-P_{2}\,}
+	\end{equation}
+
+	
+	que és l’expressió requerida per calcular el volum $V_{0}$ amb les nostres mesures inicials $(V_{1},P_{1})$ i finals $(V_{2},P_{2})$. Realitzant els càlculs obtenim les correccions $V^{1}_0 = 4,42 \pm 2,89$ cm$^3$ i $V^2_0 = 5,25 \pm 1,93$ cm$^3$ per a la 1ª i 2ª comrpessions, respectivament.
+	
+	Reflectint en el valors obtinguts de $V_0$, hi han un seguit de comentaris a fer:
+	
+	- Tal i com hem descrit $V_0$, el volum dels cables i sensor de pressió, no tindria massa sentit que aquest sigui diferent per a les dues compressions. Al cap i a la fi, és un volum que només depen de la geometria del nostre muntatge. El fet de que $V^1_0 < V^2_0$ és un altre motiu que recolça l'amplació en l'informe individual d'una possible dependència de la correcció de volum envers el rang de pressions de l'experiment. Pareix que quan més gran sigui la pressió a la que s'arriba, major serà aquesta correcció. 
+	
+
+	
+	- Donat que hem considerat el desplaçament de volums de les regressions d'ambdues compressions aproximadament iguals (veure Taula~\ref{table:regressions12}), el fet de que $V^1_0$ i $ V^2_0$ siguin compatibles dins la seva incertesa ens indica que fins a cert punts podriem considerar una correcció de volum fixa per al nostre experiment. Això coincidiria amb la idea de que es deu únicament als volums de l'experiment no provenents de la xeringa que no s'havien tingut en compte en associar pressions no amb el volum total de l'experiment, sinò amb el volum d'aquesta.
+	
+	
+	- Veiem unes incerteses grans, degudes a les consideracions conservatives descrites a la Taula~\ref{table:compressio1}.
+	
+	
+	\textbf{És possible obtenir el volum $V_0$ mitjançant una representació gràfica del volum en funció
+		de la pressió?}
+		
+	En efecte, i de fet ja ho hem fet. Denotant $V$ com el volum de la xeringa i introdunt l'equació $V_t = V + V_0$, on $V_t$ és el volum total de l'experiment i $V_0$ la correció de volum, volem interpretar la Figura~\ref{fig:q3} com a una manera de calcular la correcció de volum. Consideram primer els $V_t$ envers P$^{-1}$. Aquestes tuples segueixen la llei dels gasos ideals donat que $V_t$ és el volum real de l'experiment en què l'aire exerceix la pressió P. Seguint la llei i denotant $b' = n RT$ es compleix:
+	
+	\begin{equation}
+		\label{eq:corrv}
+		 V_t = b' P^{-1}
+	\end{equation}
+	
+	Però combinant amb l'equació $ V_t = V + V_0 $ obtenim:
+	
+	$$
+	V + V_0 = b' P^{-1} \,\, \iff \,\, V = -V_0 +b'P^{-1}
+	$$
+	I només cal adonar-nos que aquesta darrera equació coincideix amb al nostre model de regressió originalment utilitzat l'Equació~\ref{eq:modelrecta} identificant $V_0 = -a$ i $b=b'$. Per tant, efectivament, ja hem calculat aquesta correcció gràficament i hem obtingut els valors $V^{1}_0 = 4,50 \pm 0,34$ cm$^3$ i $V^2_0 = 5,09 \pm 0,12$ cm$^3$. Aquests són compatibles i a més a més molt propers als calculats mitjançant l'Equació~\ref{eq:correction}.
+	
+		\newpage
+	\subsection{Expansions i compressions: Adiabàtiques}
+	
+
+	\textbf{A partir de les compressions adiabàtiques d’aire ($\gamma=\tfrac{7}{5}$) determineu la correcció en volum a partir d’una representació del volum en funció de la pressió. Quines variables representaríeu?}
+	
+	Començarem determinant les variables. Per a un procés adiabàtic amb quantitat de gas fixa, volum mesurat $V$ i amb correció de volum $V_0$, es compleix (Equació 1 del guió, \cite{guio_practiques}):
+	\[
+	P\,(V+V_0)^{\gamma} = K \quad\Rightarrow\quad
+	V+V_0 = K^{1/\gamma}\,P^{-1/\gamma}.
+	\]
+	Per tant, definint $b:=K^{1/\gamma}$ obtenim l'equació 
+	\[
+	V \;=\; b P^{-1/\gamma} \;-\; V_0,
+	\]
+	que es lineal respecte $P^{-1/\gamma}$, amb ordenada a l'origen $-V_0$, que és el que cercam. Tenim les tuples $(V,P)$ mesurades a la compressió, i considerant $\gamma=\tfrac{7}{5}$ podem construir una regressió per aquestes dades i obtenir el valor per la correció de volum:
+	
+	% ---------- Figure: V vs P^{-1/gamma} with linear fit ----------
+	\begin{figure}[ht]
+		\centering
+		% Replace the filename below with your actual image file
+		\includegraphics[width=0.82\linewidth]{regressio_aire_V_vs_Pm1gamma.png}
+		\caption{Estimació del volum mort $V_0$ per a l’aire ($\gamma=\tfrac{7}{5}$) a partir de la regressió lineal de
+			$V$ (eix $y$) en funció de $P^{-1/\gamma}$ (eix $x$). El model ajustat és de la forma
+			$V = a + b\,P^{-1/\gamma}$. Per a la incertesa sobre $P^{-1/\gamma}$, veure l'Equació~\ref{eq:incertesa_P_inv_gamma}. Podeu trobar els paràmetres a la Taula~\ref{tab:regressio_air_params}}
+		\label{fig:V_vs_Pm1gamma_air}
+	\end{figure}
+	
+\begin{table}[h]
+	\centering
+	\caption{Paràmetres de la regressió lineal corresponent a la Figura~\ref{fig:V_vs_Pm1gamma_air}. S'ha realitzat una conversió de L a cm$^3$.}
+	\begin{tabular}{|c|c|}
+		\hline
+		Paràmetres & Valor \\
+		\hline
+		$a$ (cm$^3$) & $25,73 \pm 0,76$ \\
+		$b$ (cm$^3\cdot$kPa$^{5/7}$) & $6197 \pm 26$ \\
+		$R^2$ & $0,9996$ \\
+		\hline
+	\end{tabular}
+	\label{tab:regressio_air_params}
+\end{table}
+
+	
+	Com veiem a la Taula~\ref{tab:regressio_air_params} hem obtingut $V_0 = -a = 25,73 \pm 0,76$ cm$^3$. Aquest valor petit en comparació amb el volum de la xeringa, però encara així serà rellevant pels càlculs. D'aquesta manera, \textbf{a partir d'aquest punt} aplicarem la correcció de volum a tots els volums mesurats de les experiències adiabàtiques i \textbf{ens referirem a $V_t = V + V_0$ com al volum mesurat, o simplement com a $V$} (incertesa sobre $V_t$ a l'Equació~\ref{eq:incertesa_Vt}).
+	\newpage
+	
+\textbf{- A partir de les dades obtingudes en les diverses experiències, verifiqueu quina equació d’estat compleixen els gasos en cada cas. Determineu la pressió, el volum i la temperatura dels estats inicials i finals, i compareu-los amb els valors que prediu la teoria.}
+
+	Després de realitzar les experiències obtenim les següents dades per als estats inicials i finals dels gasos:
+	 
+	 
+	 
+	 \begin{table}[h]
+	 	\centering
+	 	\caption{Valors inicials de volum, pressió i temperatura per a cada gas i procés (compressió/expansió).}
+
+	 	\begin{tabular}{|c|ccc|}
+	 		\hline
+	 		& Volum (cm$^3$) & Pressió (kPa) & Temperatura (K) \\
+	 		\hline
+	 		Aire (comp) & $227,76 \pm 0,76$ & $102,50 \pm 0,1$ & $298,546 \pm 0,065$ \\
+	 		Aire (exp)  & $110,13 \pm 0,76$ & $96,20 \pm 0,1$  & $297,959 \pm 0,065$ \\
+	 		\hline
+	 		CO$_2$ (comp) & $232,03 \pm 0,76$ & $104,50 \pm 0,1$ & $299,523 \pm 0,065$ \\
+	 		CO$_2$ (exp)  & $110,76 \pm 0,76$ & $96,20 \pm 0,1$  & $298,546 \pm 0,065$ \\
+	 		\hline
+	 		Butà (comp) & $228,51 \pm 0,76$ & $108,40 \pm 0,1$ & $299,197 \pm 0,065$ \\
+	 		Butà (exp)  & $108,76 \pm 0,76$ & $101,10 \pm 0,1$ & $299,197 \pm 0,065$ \\
+	 		\hline
+	 	\end{tabular}
+	 	\label{tab:ini_VPT}
+	 \end{table}
+	 
+	 \begin{table}[h]
+	 	\centering
+	 	\caption{Valors finals de volum, pressió i temperatura per a cada gas i procés (compressió/expansió).}
+	
+	 	\begin{tabular}{|c|ccc|}
+	 		\hline
+	 		& Volum (cm$^3$) & Pressió (kPa) & Temperatura (K) \\
+	 		\hline
+	 		Aire (comp) & $106,638 \pm 0,757$ & $302,7 \pm 0,1$ & $370,797 \pm 0,065$ \\
+	 		Aire (exp)  & $237,803 \pm 0,757$ & $38,6 \pm 0,1$  & $261,996 \pm 0,065$ \\
+	 		\hline
+	 		CO$_2$ (comp) & $106,482 \pm 0,757$ & $283,7 \pm 0,1$ & $336,723 \pm 0,065$ \\
+	 		CO$_2$ (exp)  & $240,081 \pm 0,757$ & $38,1 \pm 0,1$  & $268,707 \pm 0,065$ \\
+	 		\hline
+	 		Butà (comp) & $106,326 \pm 0,757$ & $258,3 \pm 0,1$ & $317,048 \pm 0,065$ \\
+	 		Butà (exp)  & $240,237 \pm 0,757$ & $43,0 \pm 0,1$  & $283,300 \pm 0,065$ \\
+	 		\hline
+	 	\end{tabular}
+	 	 \label{tab:fin_VPT}
+	 \end{table}
+	 
+	\textbf{Verificació adiabàtica i comprobació tèorica amb $PV^{\gamma}=\mathrm{const}$.}
+	
+	Partim de l'equació d'estat $PV^{\gamma}=\mathrm{const}$. Realitzant el quocient entre pressions i volums inicials/finals obtenim:
+	$$\frac{P_i}{P_f}=\left(\frac{V_f}{V_i}\right)^{\gamma}$$
+	
+	Denotant $R_P=\frac{P_i}{P_f}$, $R_V=\left(\frac{V_f}{V_i}\right)^{\gamma}$, expressam la discrepància absoluta $\Delta \;=\; |R_P - R_V|$ que ha de ser zero (tenint en compte incerteses) si el procés és adiabàtic, tal i com es prediu a la teoria. Veiem els valors a la següent taula:
+	
+	\begin{table}[h]
+		\centering
+		\caption{Verificació de la relació adiabàtica mitjançant $\Delta$ per a les experiències. S'han emprat els valors de la relació de calor específic: $\gamma_{aire} =1,40$, $\gamma_{CO2}=1,30$, $\gamma_{buta}=1,09$. Veure Equacions~\ref{eq:incertesa_RV},~\ref{eq:incertesa_RP} i ~\ref{eq:incertesa_delta_R} per a les incerteses.}
+		\begin{tabular}{|c|ccc|}
+			\hline
+			 & $P_i/P_f$ & $(V_f/V_i)^{\gamma}$ & $\Delta$ \\
+			\hline
+			Aire (comp) & $0.33862 \pm 0.00035$ & $0.3456 \pm 0.0038$ & $0.0074 \pm 0.0038$ \\
+			Aire (exp)  & $2.4922 \pm 0.0070$ & $2.938 \pm 0.032$ & $0.446 \pm 0.032$ \\ \hline
+			Butà (comp) & $0.41967 \pm 0.00042$ & $0.4344 \pm 0.0037$ & $0.0147 \pm 0.0037$ \\
+			Butà (exp)  & $2.3511 \pm 0.0059$ & $2.372 \pm 0.020$ & $0.0210 \pm 0.020$ \\ \hline
+			CO$_2$ (comp) & $0.36835 \pm 0.00038$ & $0.3633 \pm 0.0037$ & $0.0051\pm 0.0037$ \\
+			CO$_2$ (exp)  & $2.5249 \pm 0.0071$ & $2.734 \pm 0.027$ & $0.209 \pm 0.028$ \\
+			\hline
+		\end{tabular}
+		\label{tab:adiabatic_ratios_delta}
+	\end{table}
+
+	
+ Observam que en cap diferència $\Delta$ és compatible però la majoria dels valors són petits, de l'ordre de 10$^{-2}$ o inferiors. Aquest fet ens indica que el mètode experimental, en efecte, és una molt bona \textit{aproxmació adiabàtica} per a la compressió i expansió. Els gasos segueixen l'equació d'estat. 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	\newpage
+	
+	\textbf{- Trobeu el valor de $\gamma$ per a cada gas i l’error associat mitjançant les expressions $PV^{\gamma} = ctant$ i $TV^{\gamma-1} = ctant$.
+		Compareu els valors de $\gamma$ obtinguts amb els valors tabulats. Si hi ha molta diferència entre
+		els valors tabulats i els experimentals, proveu de donar més pes estadístic als punts inicials
+		i finals i torneu a calcular $\gamma$. Per quina raó creieu que donant més pes estadístic als punts inicials i finals s’obté un valor
+		més acurat de $\gamma$?}
+		
+	Per a calcular el valor del coeficient adiabàtic $\gamma$ podem utiltizar les relacions adiabàtiques ja esmentades: 
+	\[
+	PV^{\gamma}=\text{const}\,, \qquad T\,V^{\gamma-1}=\text{const}.
+	\]
+	Si prenem logaritmes obtenim dues formes lineals que, donades les dades experimentals, podem ajustar mitjançant una regressió, i així obtenir un valor experimental de les relacions de calors específics:
+	\begin{align}
+		\label{eq:ajustPV}
+		\ln P &= \ln(\text{const})\;-\;\gamma\,\ln V := a_P + b_{PV}\ln  V
+		\quad\Longrightarrow\quad
+		\; b_{PV} = -\gamma\;,
+		\\
+		\label{eq:ajustTV}
+		\ln T &= \ln(\text{const})\;+\;(1-\gamma)\,\ln V := a_T + b_{TV}\ln V
+		\quad\Longrightarrow\quad
+		\; b_{TV} = 1-\gamma\;.
+	\end{align}
+	D'aquesta manera els valors experimentals de $\gamma$ a partir de les regressions lineals seran
+	$
+	\;\gamma_{PV} = -\,b_{PV}\; 
+	$ i 
+	$\;\gamma_{TV} = 1 - b_{TV}\;$. Veiem ara els resultats dels càlculs en la taula següent:
+	
+\begin{table}[h]
+	\centering
+	\caption{Estimacions de $\gamma$ combinades a partir de les dues regressions lineals juntament amb els coeficients de correlació $R^2$ de cada ajust. També afegim el valor teòric esperat.}
+	\begin{tabular}{|c|cc|cc|c|}
+		\hline
+		& $\gamma_{PV}$ & $R^2$ & $\gamma_{TV}$ & $R^2$ & $\gamma_{\text{teòric}}$ \\
+		\hline
+		Aire (comp)  & $1.4080 \pm 0.0069$ & $0.9995$ & $1.2614 \pm 0.0084$ & $0.9778$ & $1.40$ \\
+		Aire (exp)   & $1.176 \pm 0.013$ & $0.9966$ & $1.1717 \pm 0.0029$ & $0.9919$ & $1.40$ \\ \hline
+		CO$_2$ (comp) & $1.2693 \pm 0.0050$ & $0.9997$ & $1.1402 \pm 0.0049$ & $0.9771$ & $1.30$ \\
+		CO$_2$ (exp)  & $1.1746 \pm 0.0086$ & $0.9987$ & $1.1316 \pm 0.0030$ & $0.9873$ & $1.30$ \\ \hline
+		Butà (comp)  & $1.1114 \pm 0.0086$ & $0.9991$ & $1.0679 \pm 0.0032$ & $0.9686$ & $1.09$ \\
+		Butà (exp)   & $1.0775 \pm 0.0042$ & $0.9996$ & $1.0704 \pm 0.0018$ & $0.9829$ & $1.09$ \\
+		\hline
+	\end{tabular}
+	\label{tab:gamma_combined}
+\end{table}
+
+Veiem com l'ajust de l'Equació~\ref{eq:ajustPV} ens ha donat bons resultats: no superen el $0,03$ d'error per a les compressions. Els valors experimentals de l'ajust de l'Equació~\ref{eq:ajustTV}, que a priori no són tan bons, els atribuim a l'aproximació adiabàtica realitzada. Encara que les compresions/expansions són ràpides, hi ha un inevitable intercanvi de temperatura amb l'ambient que pot afectar directament a la mesura de $T$. A més a més, la calibració per a la mesura de la tempreatura a l'aparell pot ser una altra raó d'aquest fet.
+
+Encara que els nostres resultats no s'allunyen massa dels tèorics, en cas de fer una regressió amb pesos afavorint mesures inicials i finals, trobaríem un resultat més acurat per a les $\gamma$. En comparació amb els punts intermedis, ambdós són punts perfectament adiabàtics: a l'inici de les experiències a la Taula~\ref{tab:ini_VPT}, ens trobam a la temperatura i pressió molt a prop de l'ambient per tant no hi ha cap intercanvi de calor amb l'entorn; i al final, mantenim les condicions de volum i pressió exercides al gas pel que la temperatura roman constant (fins que deixam anar la palanca del recipient).
+
+
+
+	\textbf{ Determineu quina de les dues equacions dona millors resultats i si correspon a un procés de compressió o d’expansió.}
+	
+	Com ja hem comentat a la qüestió anterior, l'Equació~\ref{eq:ajustPV} per a les compressions ens ha donat millors resultats per al càlcul de $\gamma$. Atribuim aquest fet a que les variables de pressió i volum són més fàcils de controlar a l'experiment que no la temperatura. El treball extern realitzat per nosaltres al gas es tradueix en fixar $P$ i $V$: no tenim cap control directe de la temperatura, la qual adiabàticament correspondria perfectament a uns valors concrets de les altres dues variables d'estat, però inevitablement perdem una part en forma de calor.
+	
+	\newpage
+	
+	\textbf{Determineu quin dels tres gasos es comporta de manera més ideal. Justifiqueu la vostra resposta.}
+	El gas que presenta un comportament més ideal és el butà. Independentment de la regressió presa per a la seva mesura, obtenim els valors de $\gamma$ més propers a 1.  Això és degut a que  a l'equació d'estat d'un cas ideal, $PV = $ctant, tenim essencialment $\gamma = 1$. Comparant amb les relacions adiabàtiques per als gasos,un coeficient més a prop de 1 ens aproxima més a aquest comportament ideal.
+	
+	
+	\textbf{Avalueu el treball realitzat en les compressions i expansions mitjançant una integració
+		numèrica de les dades experimentals. Compareu els valors obtinguts experimentalment
+		amb els que prediu la teoria.}
+	
+	
+	\paragraph{Càlculs teòrics:}
+	Prenem l'equació d'estat adiabàtica
+	$
+	PV^{\gamma}=\mathrm{C}\,.
+	$
+	Com que $P =C\,V^{-\gamma}$, el treball mecànic intercanviat entre els estats inicial $(P_i,V_i)$ i final $(P_f,V_f)$ és
+	\[
+	W_{teo} \;=\; \int_{V_i}^{V_f} p\,\mathrm{d}V
+	\;=\; C\!\int_{V_i}^{V_f} V^{-\gamma}\,\mathrm{d}V
+	\;=\; \frac{C}{1-\gamma}\!\left(V_f^{\,1-\gamma}-V_i^{\,1-\gamma}\right).
+	\]
+	Usant $C=P_iV_i^{\gamma}=P_fV_f^{\gamma}$ i reordenant obtenim (veure incertesa a l'Equació~\ref{eq:incertesa_Wteo})
+	
+	\begin{equation}
+		\label{eq:wteo}
+		W_{teo} \;=\; \,\frac{1}{1-\gamma}\,\big(P_fV_f - P_iV_i\big),
+	\end{equation}
+		
+	on veiem que si el volum augmenta (expansió), $\mathrm dV>0$ i, amb $p>0$, l’integral és positiva $\Rightarrow W>0$; si el volum disminueix (compressió), $\mathrm dV<0$ i $W<0$ (treball fet sobre el gas).
+	
+	\paragraph{Càlculs numèrics:}
+	A partir de les dades experimentals de pressió i volums per a les experiències, hem estimat el treball amb la regla del trapezi (veure incertesa a l'Equació~\ref{eq:incertesa_Wexp}):
+	
+	\begin{equation}
+		\label{eq:exp}
+		W_{\mathrm{exp}}\; = \;\sum_{k}\tfrac{1}{2}\,(p_{k+1}+p_k)\,(V_{k+1}-V_k).
+	\end{equation}
+	
+	
+	A continuació veiem els resultats dels càlculs:
+	
+	% ===================== COMPRESSIONS =====================
+	\begin{table}[h]
+		\centering
+		\caption{Treball en compressions adiabàtiques. Discrepàncies relatives respecte $W_{teo}$.}
+		\begin{tabular}{|c|ccc|}
+			\hline
+			Gas & $W_{\mathrm{exp}}$ (J) & $W_{\mathrm{teo}}$ (J) & Discrepància (\%) \\
+			\hline
+			Aire & $-20.55 \pm 0.91$ & $-22.34 \pm 0.61$ & $8.0 \pm 4.9$ \\
+			Butà & $-19.55\pm 0.71$ & $-29.9 \pm 2.4$ & $34.7 \pm 8.7$ \\
+			CO$_2$ & $-20.91\pm 0.80$ & $-19.87 \pm 0.77$ & $5.2 \pm 5.6$ \\
+			\hline
+		\end{tabular}
+		\label{tab:work_compressions}
+	\end{table}
+	
+	% ===================== EXPANSIONS =====================
+	\begin{table}[h]
+		\centering
+		\caption{Treball en expansions adiabàtiques. Discrepàncies relatives respecte $W_{teo}$.}
+		\begin{tabular}{|c|ccc|}
+			\hline
+			Gas & $W_{\mathrm{exp}}$ (J) & $W_{\mathrm{teo}}$ (J) & Discrepància (\%) \\
+			\hline
+			Aire & $7.43 \pm 0.37$ & $3.54 \pm 0.21$ & $110 \pm 14$ \\
+			Butà & $8.41 \pm 0.38$ & $7.34 \pm 0.97$ & $14 \pm 13$ \\
+			CO$_2$ & $7.59\pm 0.35$ & $5.03\pm 0.28$ & $51.0 \pm 9.3$ \\
+			\hline
+		\end{tabular}
+		\label{tab:work_expansions}
+	\end{table}
+	
+	Fixem-nos primerament com els signes coincideixen amb la discussió anterior. A la Taula~\ref{tab:work_compressions} observam unes molt bones aproximacions numèriques excepte al butà. Aquest fet l'atribuim a la quantitat de mesures experimentals en relació a la durada de la compressió respectiva: 17 parells ($P,V$) a un temps de $0.8$ segons, al contrari dels 24 a $0.11$ segons i 21 a $0.10$ segons de l'aire i CO$_2$ respectivament. Clarament hem pres menys mesures al butà quan ha sigut la més rápida, això implica que la integració numèrica serà més imprecisa, com efectivament veiem a la diferència de valors amb els teòrics.
+	
+	 Seguint la discussió, a part del butà, les mesures dels altres gasos són compatibles tenint en compte les incerteses. La discrepància entre els valors provenen també, però en molta menor mesura, per la mateixa raó que abans. A més cal recordar que els gasos no es comporten idealment ja que hem començat la deducció teòrica assumint que el gas segueix l'equació $PV^{\gamma}$). Aquesta diferència diferencia punt a punt contribueix significativament a una major discrepància teòrica-experimental.
+	
+	Pel que fa a la Taula~\ref{tab:work_expansions}, només el valor experimental pel butà és compatible amb  el teòric. Hem prés 31 mesures de parells ($P,V$) en 0.15 segons, 28 en 0.13 segons i 27 en 0.13 segons per a l'aire, el butà i el CO$_2$ respectivament.	Observam grans discrepàncies, entre altres raons per la naturalesa de l'aproximació numèrica i la no-idealitat dels gasos.
+	
+	
+	\newpage
+
+	\section{Annex}
+	\subsection{Càlcul d'incerteses}\label{subsec:incerteses}
+	
+	Sigui $f$ una funció de $n$ variables $x_1,x_2,\ldots,x_n$. A primer ordre, la incertesa total de la magnitud descrita per $f$ ve donada per
+	\begin{equation}
+			u_f(x_1,x_2,\ldots,x_n)
+		= \sqrt{\left(\frac{\partial f}{\partial x_1}\right)^{\!2} u_{x_1}^{\,2}
+			+ \cdots +
+			\left(\frac{\partial f}{\partial x_n}\right)^{\!2} u_{x_n}^{\,2}}
+		\label{eq:propagation}
+	\end{equation}
+
+	
+	La incertesa atribuïda als valors procedents d'una mitjana de $n$ dades ve donada per:
+	\begin{equation*}
+		u_m = \sqrt{u_{est}^2+u_{ins}^2}\,,
+	\end{equation*}
+	on $u_{ins}$ és la incertesa associada als instruments i $u_{est}$ és la incertesa estadística, definida com:
+	\begin{equation*}
+		u_{est} = \frac{\sigma}{\sqrt{n}}, \quad \text{on} \quad \sigma = \sqrt{ \frac{1}{n - 1} \sum_{i=1}^{n} (x_i - \bar{x})^2}\,,
+	\end{equation*}
+	on $\sigma$ és la desviació estàndard experimental i $\bar{x}$ és la mitjana aritmètica de les dades.
+	\newline
+Les incerteses específiques usades en aquesta pràctica, calculades usant la propagació d'incerteses a primer ordre, utilitzant l'Equació~\ref{eq:propagation} són:
+\begin{itemize}
+	\item Discrepància relativa \(\Delta=\dfrac{|A_{\mathrm{exp}}-A_{\mathrm{teo}}|}{A_{\mathrm{teo}}}\).
+	\begin{equation}\label{eq:incertesa_delta_A}
+		u_\Delta \;=\; 
+		\sqrt{\left(\frac{1}{A_{\mathrm{teo}}}\,u_{A_{\mathrm{exp}}}\right)^2
+			+\left(\frac{|A_{\mathrm{exp}}-A_{\mathrm{teo}}|}{A_{\mathrm{teo}}^{\,2}}\,u_{A_{\mathrm{teo}}}\right)^2 }.
+	\end{equation}
+	Si \(A_{\mathrm{teo}}\) es considera exacte, \(u_{A_{\mathrm{teo}}}=0\) i queda \(u_\Delta=\dfrac{u_{A_{\mathrm{exp}}}}{A_{\mathrm{teo}}}\).
+	
+	\item Inversa de la pressió \(P^{-1}=1/P\) (Figura~\ref{fig:q3}).
+	\begin{equation}\label{eq:incertesa_P_inv}
+		u_{P^{-1}} \;=\; \frac{u_P}{P^2}.
+	\end{equation}
+	
+	\item Nombre de mols \(n=\dfrac{b}{RT}\) (Equació~\ref{eq:n}).
+	\begin{equation}\label{eq:incertesa_n}
+		u_n \;=\; n\,\sqrt{\left(\frac{u_b}{b}\right)^2+\left(\frac{u_T}{T}\right)^2 }.
+	\end{equation}
+	
+	\item Quocients \(P_2/P_1\) i \(V_1/V_2\) (Taula~\ref{table:ratio_checks_s1s2}).
+	\begin{equation}\label{eq:incertesa_P2sobreP1}
+		u_{P_2/P_1} \;=\; \frac{P_2}{P_1}\,
+		\sqrt{\left(\frac{u_{P_2}}{P_2}\right)^2+\left(\frac{u_{P_1}}{P_1}\right)^2 }.
+	\end{equation}
+	\begin{equation}\label{eq:incertesa_V1sobreV2}
+		u_{V_1/V_2} \;=\; \frac{V_1}{V_2}\,
+		\sqrt{\left(\frac{u_{V_1}}{V_1}\right)^2+\left(\frac{u_{V_2}}{V_2}\right)^2 }.
+	\end{equation}
+	\item Discrepància de quocients \(\Delta=\big|\,P_2/P_1 - V_1/V_2\,\big|\) (Taula~\ref{table:ratio_checks_s1s2}).
+	\begin{equation}\label{eq:incertesa_delta_quotients}
+		u_\Delta \;=\; \sqrt{\,u_{P_2/P_1}^{\,2} + u_{V_1/V_2}^{\,2}\,}.
+	\end{equation}
+	
+	\item Correcció de volum \(V_0=\dfrac{P_2V_2-P_1V_1}{P_1-P_2}\) (Equació~\ref{eq:correction}). Definim \(N=P_2V_2-P_1V_1\) i \(D=P_1-P_2\). Aleshores
+	\begin{equation}\label{eq:incertesa_V0}
+		u_{V_0} \;=\; \sqrt{
+			\left(\frac{-V_1\,D - N}{D^2}\,u_{P_1}\right)^2
+			+\left(\frac{ V_2\,D + N}{D^2}\,u_{P_2}\right)^2
+			+\left(\frac{-P_1}{D}\,u_{V_1}\right)^2
+			+\left(\frac{ P_2}{D}\,u_{V_2}\right)^2 }.
+	\end{equation}
+	
+	\item Potència amb exponent adiabàtic \(P^{-1/\gamma}\) (Figura~\ref{fig:V_vs_Pm1gamma_air}, \(\gamma\) constant).
+	\begin{equation}\label{eq:incertesa_P_inv_gamma}
+		u_{P^{-1/\gamma}} \;=\; \frac{P^{-1/\gamma}}{\gamma\,P}\,u_P.
+	\end{equation}
+	
+	\item Volum total \(V_t = V+V_0\).
+	\begin{equation}\label{eq:incertesa_Vt}
+		u_{V_t} \;=\; \sqrt{\,u_V^{\,2}+u_{V_0}^{\,2}\,}.
+	\end{equation}
+	
+	\item Factors adiabàtics \(R_P=P_i/P_f\), \(R_V=(V_f/V_i)^{\gamma}\) (\(\gamma\) constant) i discrepància \(\Delta=|R_P-R_V|\) (Taula~\ref{tab:adiabatic_ratios_delta}).
+	\begin{equation}\label{eq:incertesa_RP}
+		u_{R_P} \;=\; \frac{P_i}{P_f}\,
+		\sqrt{\left(\frac{u_{P_i}}{P_i}\right)^2+\left(\frac{u_{P_f}}{P_f}\right)^2 }.
+	\end{equation}
+	\begin{equation}\label{eq:incertesa_RV}
+		u_{R_V} \;=\; R_V\,\gamma\,
+		\sqrt{\left(\frac{u_{V_f}}{V_f}\right)^2+\left(\frac{u_{V_i}}{V_i}\right)^2 }.
+	\end{equation}
+	\begin{equation}\label{eq:incertesa_delta_R}
+		u_\Delta \;=\; \sqrt{\,u_{R_P}^{\,2}+u_{R_V}^{\,2}\,}.
+	\end{equation}
+	
+	\item Treball teòric \(W_{\mathrm{teo}}=\dfrac{1}{1-\gamma}\big(P_fV_f-P_iV_i\big)\) (Equació~\ref{eq:wteo}, \(\gamma\) constant).
+	\begin{equation}\label{eq:incertesa_Wteo}
+		u_{W_{\mathrm{teo}}} \;=\; \frac{1}{|1-\gamma|}\,
+		\sqrt{(V_f\,u_{P_f})^2 + (P_f\,u_{V_f})^2 + (V_i\,u_{P_i})^2 + (P_i\,u_{V_i})^2 }.
+	\end{equation}
+	
+	\item Treball experimental (Equació~\ref{eq:exp})
+	\[
+	W_{\mathrm{exp}}=\sum_{k}\tfrac{1}{2}\,(p_{k+1}+p_k)\,(V_{k+1}-V_k).
+	\]
+	La seva incertesa (sumam termes independents) és
+	\begin{equation}\label{eq:incertesa_Wexp}
+		u_{W_{\mathrm{exp}}}
+		\;=\; \sqrt{\sum_{k}\left[
+			\frac{(V_{k+1}-V_k)^2}{4}\left(u_{p_{k+1}}^{\,2}+u_{p_k}^{\,2}\right)
+			+\frac{(p_{k+1}+p_k)^2}{4}\left(u_{V_{k+1}}^{\,2}+u_{V_k}^{\,2}\right)
+			\right]}.
+	\end{equation}
+\end{itemize}
+
+\newpage
+
+
+
+	\printbibliography[
+	heading=bibintoc,
+	title={Bibliografia}
+	]
+	
+\end{document}
